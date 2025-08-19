@@ -1,0 +1,220 @@
+<div class="row g-4" *ngIf="!loading; else loadingTpl">
+
+  <!-- Cartes Dashboard (Users, Providers, Subscriptions) -->
+  <div class="col-lg-4 col-md-6">
+    <div class="card earning-card users-card text-white overflow-hidden">
+      <span class="round small"></span>
+      <span class="round big"></span>
+      <div class="card-body">
+        <div class="avatar avatar-lg mb-3">
+          <i class="fas fa-users f-48"></i>
+        </div>
+        <h1 class="number-display">{{ userCount }}</h1>
+        <p class="card-label">Utilisateurs enregistrés</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-4 col-md-6">
+    <div class="card earning-card providers-card text-white overflow-hidden">
+      <span class="round small"></span>
+      <span class="round big"></span>
+      <div class="card-body">
+        <div class="avatar avatar-lg mb-3">
+          <i class="fas fa-cogs f-48"></i>
+        </div>
+        <h1 class="number-display">{{ providerCount }}</h1>
+        <p class="card-label">Providers</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-4 col-md-12">
+    <div class="card earning-card subscriptions-card text-white overflow-hidden">
+      <span class="round small"></span>
+      <span class="round big"></span>
+      <div class="card-body">
+        <div class="avatar avatar-lg mb-3">
+          <i class="fas fa-file-invoice-dollar f-48"></i>
+        </div>
+        <h1 class="number-display">{{ subscriptionCount }}</h1>
+        <p class="card-label">Abonnements actifs</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pie & Bar Charts -->
+  <div class="col-lg-6 col-md-12">
+    <div class="card chart-card">
+      <div class="card-body">
+        <h5 class="chart-title">Répartition des utilisateurs</h5>
+        <apx-chart [series]="pieChartOptions.series" 
+                   [chart]="pieChartOptions.chart"
+                   [labels]="pieChartOptions.labels" 
+                   [title]="pieChartOptions.title"
+                   [responsive]="pieChartOptions.responsive">
+        </apx-chart>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6 col-md-12">
+    <div class="card chart-card">
+      <div class="card-body">
+        <h5 class="chart-title">Abonnements par mois</h5>
+        <apx-chart [series]="barChartOptions.series" 
+                   [chart]="barChartOptions.chart"
+                   [xaxis]="barChartOptions.xaxis" 
+                   [title]="barChartOptions.title"
+                   [responsive]="barChartOptions.responsive">
+        </apx-chart>
+      </div>
+    </div>
+  </div>
+
+  <!-- Alert messages -->
+  <div *ngIf="alertMessage" class="col-12">
+    <div class="alert" [ngClass]="{'alert-success': alertType==='success','alert-danger': alertType==='error'}" role="alert">
+      {{ alertMessage }}
+      <button type="button" class="btn-close float-end" aria-label="Close" (click)="alertMessage = ''"></button>
+    </div>
+  </div>
+
+  <!-- Tableau Utilisateurs -->
+  <div class="col-12">
+    <div class="card table-card mt-4">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h4>Liste des utilisateurs</h4>
+          <button class="btn btn-primary" (click)="openAddUser()">Ajouter Utilisateur</button>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover table-striped align-middle">
+            <thead class="thead-dark">
+              <tr>
+                <th>Nom</th>
+                <th>Email</th>
+                <th>Rôle</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let user of users">
+                <td>{{ user.name }}</td>
+                <td>{{ user.email }}</td>
+                <td>
+                  <span class="badge bg-primary" *ngIf="user.role==='admin'">Admin</span>
+                  <span class="badge bg-secondary" *ngIf="!user.role || user.role==='user'">User</span>
+                </td>
+                <td>
+                  <button class="btn btn-sm btn-warning me-1" (click)="openEditUser(user)">Modifier</button>
+                  <button class="btn btn-sm btn-danger" (click)="deleteUser(user.id)">Supprimer</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bouton Réclamations -->
+  <div class="col-12 mt-4">
+    <button class="btn btn-danger" (click)="openReclamations()">Voir les réclamations</button>
+  </div>
+
+</div>
+
+<!-- Modal Ajout / Modification Utilisateur -->
+<div class="modal" tabindex="-1" [class.show]="showModal" [style.display]="showModal ? 'block' : 'none'">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content modal-custom">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ editingUser ? 'Modifier Utilisateur' : 'Ajouter Utilisateur' }}</h5>
+        <button type="button" class="btn-close" (click)="closeModal()"></button>
+      </div>
+      <div class="modal-body">
+        <form #userForm="ngForm">
+          <div class="mb-3">
+            <label class="form-label">Nom</label>
+            <input type="text" class="form-control" [(ngModel)]="userFormModel.name" name="name" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" [(ngModel)]="userFormModel.email" name="email" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Rôle</label>
+            <select class="form-select" [(ngModel)]="userFormModel.role" name="role">
+              <option value="user">User</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="closeModal()">Annuler</button>
+        <button class="btn btn-primary" (click)="saveUser()">{{ editingUser ? 'Modifier' : 'Ajouter' }}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Réclamations -->
+<div class="modal" tabindex="-1" [class.show]="showReclamationsModal" [style.display]="showReclamationsModal ? 'block' : 'none'">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content modal-custom">
+      <div class="modal-header">
+        <h5 class="modal-title">Réclamations</h5>
+        <button type="button" class="btn-close" (click)="closeReclamationsModal()"></button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="reclamations.length > 0; else noReclamations">
+          <table class="table table-hover table-striped align-middle">
+            <thead>
+              <tr>
+                <th>Utilisateur</th>
+                <th>Objet / Nom</th>
+                <th>Message</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let rec of reclamations">
+                <td>{{ rec.email || 'Inconnu' }}</td>
+                <td>{{ rec.name || 'Sans objet' }}</td>
+                <td>{{ rec.message }}</td>
+                <td>
+                  <span class="badge bg-warning" *ngIf="rec.status==='pending'">En attente</span>
+                  <span class="badge bg-success" *ngIf="rec.status==='resolved'">Résolu</span>
+                  <span class="badge bg-danger" *ngIf="rec.status==='rejected'">Rejeté</span>
+                </td>
+                <td>{{ rec.created_at | date:'short' }}</td>
+                <td>
+                  <button class="btn btn-sm btn-danger" (click)="deleteReclamation(rec.id!)">Supprimer</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <ng-template #noReclamations>
+          <p class="text-center text-muted">Aucune réclamation trouvée.</p>
+        </ng-template>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeReclamationsModal()">Fermer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Loading Template -->
+<ng-template #loadingTpl>
+  <div class="loading-container text-center py-5">
+    <div class="spinner-border text-primary" role="status"></div>
+    <p class="mt-2">Chargement du dashboard...</p>
+  </div>
+</ng-template>

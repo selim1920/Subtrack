@@ -1,0 +1,49 @@
+.card {
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  background-color: #ffffff;
+  margin-bottom: 1.5rem;
+  padding: 1.5rem;
+
+  .card-body {
+    padding: 0;
+    
+    h4 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: #333;
+    }
+
+    // Style du calendrier
+    mwl-calendar-month-view {
+      display: block;
+      background-color: #f8f9fa;
+      border-radius: 8px;
+      padding: 1rem;
+
+      .cal-day-cell {
+        border: 1px solid #dee2e6;
+        transition: background-color 0.2s ease-in-out;
+      }
+
+      .cal-day-cell:hover {
+        background-color: #e2f0fb;
+      }
+
+      .cal-event {
+        background-color: #007bff !important;
+        color: #fff !important;
+        border: none;
+        border-radius: 4px;
+        padding: 2px 6px;
+        font-size: 0.75rem;
+      }
+
+      .cal-header {
+        font-weight: 600;
+        color: #555;
+      }
+    }
+  }
+}

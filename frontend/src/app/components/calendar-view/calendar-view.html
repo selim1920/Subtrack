@@ -1,0 +1,83 @@
+<div class="calendar-container">
+
+  <!-- Sélecteur de date -->
+  <mat-form-field appearance="fill" class="calendar-form-field">
+    <mat-label>Sélectionner une date</mat-label>
+    <input
+      matInput
+      [matDatepicker]="picker"
+      placeholder="JJ/MM/AAAA"
+      [(ngModel)]="selectedDate"
+      [matTooltip]="selectedDate && hasSubscriptions(selectedDate) ? getSubscriptionNames(selectedDate) : ''"
+      matTooltipPosition="above"
+      matTooltipClass="sub-tooltip"
+    />
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker [dateClass]="dateClass"></mat-datepicker>
+  </mat-form-field>
+
+  <!-- Infos utilisateur -->
+  <div *ngIf="user" class="user-info">
+    <p>Utilisateur connecté : <strong>{{ user.name }}</strong> ({{ user.email }})</p>
+  </div>
+
+  <!-- Détails des abonnements -->
+  <div *ngIf="selectedDate" class="subscription-details">
+
+    <h3>Abonnements créés le {{ selectedDate | date: 'fullDate' }}</h3>
+    <ng-container *ngIf="getSubscriptionsByDate(selectedDate).length > 0; else noSubs">
+      <div class="subscription-card" *ngFor="let sub of getSubscriptionsByDate(selectedDate)">
+        <img *ngIf="sub.logo_path" [src]="sub.logo_path" alt="{{ sub.name }}" class="logo" />
+        <div class="details">
+          <h4>{{ sub.name }}</h4>
+          <p><strong>Montant :</strong> {{ sub.amount / 100 | currency:'USD' }}</p>
+          <p><strong>Cycle :</strong> {{ sub.billing_cycle === 'monthly' ? 'Mensuel' : 'Annuel' }}</p>
+          <p *ngIf="sub.notes"><strong>Note :</strong> {{ sub.notes }}</p>
+          <p *ngIf="sub.tags?.length"><strong>Tags :</strong> {{ sub.tags.join(', ') }}</p>
+          <p><strong>Créé le :</strong> {{ sub.created_at | date: 'short' }}</p>
+          <p><strong>Prochain paiement :</strong> {{ sub.next_payment_date | date: 'shortDate' }}</p>
+        </div>
+      </div>
+    </ng-container>
+    <ng-template #noSubs>
+      <p>Aucun abonnement créé ce jour.</p>
+    </ng-template>
+
+    <h3>Paiements prévus le {{ selectedDate | date: 'fullDate' }}</h3>
+    <ng-container *ngIf="getSubscriptionsByNextPaymentDate(selectedDate).length > 0; else noPayments">
+      <div class="subscription-card" *ngFor="let sub of getSubscriptionsByNextPaymentDate(selectedDate)">
+        <img *ngIf="sub.logo_path" [src]="sub.logo_path" alt="{{ sub.name }}" class="logo" />
+        <div class="details">
+          <h4>{{ sub.name }}</h4>
+          <p><strong>Montant :</strong> {{ sub.amount / 100 | currency:'USD' }}</p>
+          <p><strong>Cycle :</strong> {{ sub.billing_cycle === 'monthly' ? 'Mensuel' : 'Annuel' }}</p>
+          <p *ngIf="sub.notes"><strong>Note :</strong> {{ sub.notes }}</p>
+          <p *ngIf="sub.tags?.length"><strong>Tags :</strong> {{ sub.tags.join(', ') }}</p>
+          <p><strong>Prochain paiement :</strong> {{ sub.next_payment_date | date: 'short' }}</p>
+        </div>
+      </div>
+    </ng-container>
+    <ng-template #noPayments>
+      <p>Aucun paiement prévu ce jour.</p>
+    </ng-template>
+  </div>
+</div>
+
+<!-- 🔄 Logo Marquee EN BAS -->
+<div class="logo-marquee">
+  <div class="logo-track">
+    <img src="assets/logoweb/Amazon-Prime-Video.png" alt="Amazon Prime" />
+    <img src="assets/logoweb/Disney+_2024.svg.png" alt="Disney+" />
+    <img src="assets/logoweb/hulu.png" alt="Hulu" />
+    <img src="assets/logoweb/netflix.jpg" alt="Netflix" />
+    <img src="assets/logoweb/spotify.png" alt="Spotify" />
+    <img src="assets/logoweb/YouTube_Premium.png" alt="YouTube Premium" />
+    <!-- Boucle -->
+    <img src="assets/logoweb/Amazon-Prime-Video.png" alt="Amazon Prime" />
+    <img src="assets/logoweb/Disney+_2024.svg.png" alt="Disney+" />
+    <img src="assets/logoweb/hulu.png" alt="Hulu" />
+    <img src="assets/logoweb/netflix.jpg" alt="Netflix" />
+    <img src="assets/logoweb/spotify.png" alt="Spotify" />
+    <img src="assets/logoweb/YouTube_Premium.png" alt="YouTube Premium" />
+  </div>
+</div>

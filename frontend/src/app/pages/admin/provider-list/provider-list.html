@@ -1,0 +1,61 @@
+<div class="provider-page">
+  <header class="top-row">
+    <div class="stat-card">
+      <div class="stat-number">{{ count }}</div>
+      <div class="stat-label">Providers</div>
+    </div>
+
+    <div class="controls">
+      <input type="text" placeholder="Rechercher un provider..." [(ngModel)]="searchTerm" (input)="currentPage=1" />
+      <button class="refresh" (click)="refresh()">Rafraîchir</button>
+    </div>
+  </header>
+
+  <div *ngIf="error" class="error">{{ error }}</div>
+
+  <!-- Formulaire ajout (affiché quand on n'édite pas) -->
+  <div class="provider-form" *ngIf="!editingProvider">
+    <h3>Ajouter un provider</h3>
+    <div class="form-row">
+      <input type="text" placeholder="Nom" [(ngModel)]="newProvider.nom" />
+      <input type="text" placeholder="URL du logo" [(ngModel)]="newProvider.logo" />
+      <button (click)="addProvider()">Ajouter</button>
+    </div>
+  </div>
+
+  <!-- Form édition -->
+  <div class="provider-form edit" *ngIf="editingProvider">
+    <h3>Modifier provider</h3>
+    <div class="form-row">
+      <input type="text" [(ngModel)]="editingProvider.nom" />
+      <input type="text" [(ngModel)]="editingProvider.logo" />
+      <button (click)="saveProvider()">Enregistrer</button>
+      <button class="ghost" (click)="cancelEdit()">Annuler</button>
+    </div>
+  </div>
+
+  <!-- Card grid -->
+  <div class="card-grid" *ngIf="paginated.length > 0">
+    <div class="provider-card" *ngFor="let p of paginated">
+      <div class="logo-wrap">
+        <img [src]="p.logo" [alt]="p.nom" (error)="p.logo='https://via.placeholder.com/110?text=No+Image'" />
+      </div>
+      <div class="meta">
+        <h4>{{ p.nom }}</h4>
+        <div class="card-actions">
+          <button class="edit-btn" (click)="startEdit(p)">Modifier</button>
+          <button class="delete-btn" (click)="deleteProvider(p.id)">Supprimer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!paginated.length && !loading && !error" class="no-data">Aucun provider trouvé.</div>
+
+  <!-- Pagination -->
+  <div class="pagination" *ngIf="filtered.length > pageSize">
+    <button (click)="prevPage()" [disabled]="currentPage === 1">Précédent</button>
+    <div class="page-info">Page {{ currentPage }} / {{ totalPages() }}</div>
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages()">Suivant</button>
+  </div>
+</div>

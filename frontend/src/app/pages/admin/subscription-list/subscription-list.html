@@ -1,0 +1,43 @@
+<div class="subscription-list">
+  <h2>Liste des Abonnements (Admin)</h2>
+
+  <input
+    type="text"
+    class="search-bar"
+    placeholder="Rechercher un abonnement..."
+    [(ngModel)]="searchTerm"
+    (input)="applyFilter()"
+  />
+
+  <div *ngIf="loading" class="loading">Chargement...</div>
+  <div *ngIf="error" class="error">{{ error }}</div>
+
+  <ng-container *ngIf="!loading && filteredSubscriptions.length; else noSubs">
+    <div class="cards-container">
+      <div *ngFor="let sub of pagedSubscriptions" class="subscription-card">
+        <div class="card-header">
+          <h3>{{ sub.name }}</h3>
+          <span class="provider">{{ sub.provider?.nom || 'Non renseigné' }}</span>
+        </div>
+        <div class="card-body">
+          <p><strong>ID:</strong> {{ sub.id }}</p>
+          <p><strong>Montant:</strong> {{ sub.amount }} €</p>
+          <p><strong>Cycle:</strong> {{ sub.billing_cycle }}</p>
+          <p><strong>Tags:</strong> {{ sub.tags?.join(', ') || 'Aucun' }}</p>
+          <p><strong>Date Création:</strong> {{ sub.created_at | date:'shortDate' }}</p>
+          <p><strong>Prochaine échéance:</strong> {{ sub.next_payment_date | date:'shortDate' }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="pagination" *ngIf="filteredSubscriptions.length > itemsPerPage">
+      <button (click)="prevPage()" [disabled]="currentPage === 1">Précédent</button>
+      <span>Page {{ currentPage }} / {{ totalPages }}</span>
+      <button (click)="nextPage()" [disabled]="currentPage === totalPages">Suivant</button>
+    </div>
+  </ng-container>
+
+  <ng-template #noSubs>
+    <div class="no-subscriptions">Aucun abonnement trouvé.</div>
+  </ng-template>
+</div>

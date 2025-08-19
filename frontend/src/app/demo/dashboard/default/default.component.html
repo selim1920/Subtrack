@@ -1,0 +1,137 @@
+<div class="row">
+  <div class="col-xl-4 col-md-6">
+    <div class="card earning-card bg-secondary-dark text-white overflow-hidden">
+      <span class="round secondary-round small"></span>
+      <span class="round secondary-round big"></span>
+      <div class="card-body">
+        <div class="row">
+          <div class="col">
+            <div class="avatar avatar-lg">
+              <i class="text-white ti ti-credit-card f-24"></i>
+            </div>
+          </div>
+          <div class="col-auto d-flex align-items-center">
+            <div class="btn-group" ngbDropdown>
+              <a
+                type="button"
+                class="avatar avatar-xs bg-secondary dropdown-toggle arrow-none"
+                ngbDropdownToggle
+              >
+                <i class="ti ti-dots"></i>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+                <li><button class="dropdown-item" type="button">Import Card</button></li>
+                <li><button class="dropdown-item" type="button">Export</button></li>
+              </ul>
+            </div>
+
+            <!-- Bouton Déconnexion -->
+            <button
+              (click)="logout()"
+              class="btn btn-danger ms-2"
+              style="height: 32px; padding: 0 12px; font-size: 0.85rem;"
+            >
+              Déconnexion
+            </button>
+ 
+
+          </div>
+        </div>
+
+<span class="d-block f-34 f-w-500 my-2" style="color: white;">
+  {{ subscriptionCount }}
+  <i class="ti ti-database opacity-50" style="color: white;"></i>
+</span>
+
+<p class="mb-0 opacity-50" style="color: white;">
+  Abonnements créés
+</p>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xl-4 col-md-6">
+    <div class="card earning-card bg-primary-dark text-white overflow-hidden">
+      <span class="round primary-round small"></span>
+      <span class="round primary-round big"></span>
+      <div class="card-body">
+        <app-chart-data-month></app-chart-data-month>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xl-4 col-md-12">
+    <div class="card total-income-card overflow-hidden bg-primary-dark text-white">
+      <div class="card-body">
+        <div class="d-flex align-items-center">
+          <div class="avatar avatar-lg icon m-r-5">
+            <i class="text-white ti ti-layout-board-split f-24"></i>
+          </div>
+      <div class="ms-2">
+  <h4 class="text-white f-w-600 mb-1"> DT {{ totalAmount | number:'1.0-2' }}</h4>
+  <p class="mb-1 opacity-75" style="color: white;">Total Income</p>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="card total-income-card warning overflow-hidden mt-3">
+      <div class="card-body">
+        <div class="d-flex align-items-center">
+          <div class="avatar avatar-lg icon-warning m-r-5">
+            <i class="text-warning ti ti-layout-board-split f-24"></i>
+          </div>
+          <div class="ms-2">
+                            <!-- Affichage du nom utilisateur -->
+      <p class="mb-1 opacity-75" style="color:black ;">
+  Connecté en tant que: <strong>{{ userName }}</strong>
+</p>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xl-8 col-md-12">
+    <app-bar-chart></app-bar-chart>
+  </div>
+
+  <div class="col-xl-4 col-md-12">
+    <div class="card">
+      <div class="card-body">
+       <div class="row mb-3 align-items-center">
+  <div class="col">
+    <h4>Providers abonnés</h4>
+  </div>
+</div>
+
+<div *ngFor="let provider of providersWithUserSubs" class="rounded bg-light-secondary overflow-hidden mb-3 p-3 d-flex align-items-center">
+  <img [src]="provider.logo" alt="{{provider.nom}}" width="40" height="40" class="me-3" style="object-fit: contain;">
+  <div>
+    <h5 class="text-secondary mb-0">{{ provider.nom }}</h5>
+  </div>
+</div>
+
+         <app-bajaj-chart></app-bajaj-chart>
+ <!-- 🔄 Logo Marquee EN BAS -->
+<div class="logo-marquee">
+  <div class="logo-track">
+    <img src="assets/logoweb/Amazon-Prime-Video.png" alt="Amazon Prime" />
+    <img src="assets/logoweb/Disney+_2024.svg.png" alt="Disney+" />
+    <img src="assets/logoweb/hulu.png" alt="Hulu" />
+    <img src="assets/logoweb/netflix.jpg" alt="Netflix" />
+    <img src="assets/logoweb/spotify.png" alt="Spotify" />
+    <img src="assets/logoweb/YouTube_Premium.png" alt="YouTube Premium" />
+    <!-- Boucle -->
+    <img src="assets/logoweb/Amazon-Prime-Video.png" alt="Amazon Prime" />
+    <img src="assets/logoweb/Disney+_2024.svg.png" alt="Disney+" />
+    <img src="assets/logoweb/hulu.png" alt="Hulu" />
+    <img src="assets/logoweb/netflix.jpg" alt="Netflix" />
+    <img src="assets/logoweb/spotify.png" alt="Spotify" />
+    <img src="assets/logoweb/YouTube_Premium.png" alt="YouTube Premium" />
+  </div>
+</div>
+       

@@ -1,0 +1,108 @@
+<div #formContainer class="container forms">
+
+  <!-- Login Form -->
+  <div class="form login">
+    <div class="form-content">
+      <header>Login</header>
+      <form (ngSubmit)="onLogin()">
+        <div class="field input-field">
+          <input
+            type="email"
+            name="loginEmail"
+            [(ngModel)]="email"
+            placeholder="Email"
+            class="input"
+            required />
+        </div>
+
+        <div class="field input-field">
+          <input
+            type="password"
+            name="loginPassword"
+            [(ngModel)]="password"
+            placeholder="Password"
+            class="password"
+            required />
+          <i class="bx bx-hide eye-icon"></i>
+        </div>
+
+        <div class="form-link">
+          <a href="#" class="forgot-pass">Forgot password?</a>
+        </div>
+
+        <div class="field button-field">
+          <button type="submit">Login</button>
+        </div>
+      </form>
+
+      <div class="form-link">
+        <span>Don't have an account?
+          <a href="#" class="link signup-link">Signup</a>
+        </span>
+      </div>
+    </div>
+    <div class="line"></div>
+  </div>
+
+  <!-- Signup Form -->
+  <div class="form signup">
+    <div class="form-content">
+      <header>Signup</header>
+      <form (ngSubmit)="onRegister()">
+        <div class="field input-field">
+          <input
+            type="text"
+            name="signupName"
+            [(ngModel)]="name"
+            placeholder="Name"
+            class="input"
+            required />
+        </div>
+
+        <div class="field input-field">
+          <input
+            type="email"
+            name="signupEmail"
+            [(ngModel)]="email"
+            placeholder="Email"
+            class="input"
+            required />
+        </div>
+
+        <div class="field input-field">
+          <input
+            type="password"
+            name="signupPassword"
+            [(ngModel)]="password"
+            placeholder="Create password"
+            class="password"
+            required />
+          <i class="bx bx-hide eye-icon"></i>
+        </div>
+
+        <div class="field input-field">
+          <input
+            type="password"
+            name="signupConfirm"
+            [(ngModel)]="confirmPassword"
+            placeholder="Confirm password"
+            class="password"
+            required />
+          <i class="bx bx-hide eye-icon"></i>
+        </div>
+
+        <div class="field button-field">
+          <button type="submit">Signup</button>
+        </div>
+      </form>
+
+      <div class="form-link">
+        <span>Already have an account?
+          <a href="#" class="link login-link">Login</a>
+        </span>
+      </div>
+    </div>
+    <div class="line"></div>
+  </div>
+
+</div>

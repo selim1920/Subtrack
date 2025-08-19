@@ -1,0 +1,281 @@
+<div class="container">
+  <div class="strip"></div>
+  <h2 class="mb-4">Gestion des abonnements</h2>
+
+  <!-- BOUTON POUR OUVRIR LA MODALE -->
+  <div class="mb-3 text-center">
+    <button class="btn btn-primary" (click)="openModal()">Ajouter un abonnement</button>
+  </div>
+
+  <!-- MODALE BOOTSTRAP -->
+  <div
+    class="modal fade"
+    tabindex="-1"
+    [ngClass]="{ 'show d-block': showModal }"
+    [style.backgroundColor]="'rgba(0,0,0,0.5)'"
+    role="dialog"
+    aria-modal="true"
+    [attr.aria-hidden]="!showModal"
+  >
+    <div
+      class="modal-dialog modal-dialog-centered"
+      role="document"
+      style="max-width: 600px;"
+    >
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            {{ isEditMode ? 'Modifier un abonnement' : 'Ajouter un abonnement' }}
+          </h5>
+          <button
+            type="button"
+            class="btn-close"
+            aria-label="Close"
+            (click)="closeModal()"
+          ></button>
+        </div>
+
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="p-3" novalidate>
+          <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+          <div *ngIf="success" class="alert alert-success">{{ success }}</div>
+
+          <div class="mb-3">
+            <label class="form-label">Nom</label>
+            <input formControlName="name" class="form-control" />
+            <div
+              *ngIf="form.controls['name'].invalid && form.controls['name'].touched"
+              class="text-danger"
+            >
+              Le nom est obligatoire.
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Fournisseur</label>
+            <select
+              formControlName="provider_id"
+              class="form-select"
+              (change)="onProviderChange()"
+            >
+              <option [ngValue]="null">-- Choisir un fournisseur --</option>
+              <option *ngFor="let p of providers" [ngValue]="p.id">
+                {{ p.nom }}
+              </option>
+            </select>
+            <div
+              *ngIf="form.controls['provider_id'].invalid && form.controls['provider_id'].touched"
+              class="text-danger"
+            >
+              Le fournisseur est obligatoire.
+            </div>
+          </div>
+
+          <!-- Aperçu du logo dynamique -->
+          <div class="mb-3" *ngIf="selectedProviderLogo">
+            <label class="form-label">Logo du fournisseur :</label><br />
+            <img
+              [src]="selectedProviderLogo"
+              alt="Logo fournisseur"
+              class="logo-preview"
+              (error)="hideImage($event)"
+            />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Montant</label>
+            <input type="number" formControlName="amount" class="form-control" min="0" />
+            <div
+              *ngIf="form.controls['amount'].invalid && form.controls['amount'].touched"
+              class="text-danger"
+            >
+              Le montant est obligatoire et doit être supérieur ou égal à 0.
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Cycle de facturation</label>
+            <select formControlName="billing_cycle" class="form-select">
+              <option value="monthly">Mensuel</option>
+              <option value="yearly">Annuel</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Notes</label>
+            <textarea formControlName="notes" class="form-control"></textarea>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Tags (séparés par des virgules)</label>
+            <input formControlName="tags" class="form-control" />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Date du prochain paiement</label>
+            <input
+              type="date"
+              formControlName="next_payment_date"
+              class="form-control"
+            />
+            <div
+              *ngIf="form.controls['next_payment_date'].invalid && form.controls['next_payment_date'].touched"
+              class="text-danger"
+            >
+              La date du prochain paiement est obligatoire.
+            </div>
+          </div>
+
+          <!-- Carte bancaire Stripe -->
+          <div class="mb-3" *ngIf="clientSecret">
+            <label class="form-label">Carte bancaire</label>
+            <div
+              #cardElement
+              class="form-control p-2"
+              style="height: 42px;"
+            ></div>
+            <div id="card-errors" class="text-danger mt-2"></div>
+          </div>
+
+          <div class="d-flex justify-content-end">
+            <button
+              type="button"
+              class="btn btn-secondary me-2"
+              (click)="closeModal()"
+            >
+              Annuler
+            </button>
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="form.invalid"
+            >
+              {{ isEditMode ? 'Modifier' : 'Ajouter' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- AGENDA -->
+  <div class="d-flex justify-content-end mb-3">
+    <button class="btn btn-outline-info" (click)="toggleAgenda()">
+      {{ showAgenda ? "Masquer l'agenda" : "Afficher l'agenda" }}
+    </button>
+  </div>
+
+  <div
+    *ngIf="showAgenda"
+    class="agenda p-3 border rounded bg-white shadow-sm"
+    style="max-width: 600px; margin: auto;"
+  >
+    <h4 class="mb-3 text-center">📅 Agenda des abonnements</h4>
+    <ul class="list-group">
+      <li
+        *ngFor="let sub of subscriptions"
+        class="list-group-item d-flex justify-content-between align-items-center"
+      >
+        <div class="d-flex align-items-center gap-2">
+          <img
+            *ngIf="sub.logo_path"
+            [src]="sub.logo_path"
+            alt="Logo"
+            class="logo-table"
+            (error)="hideImage($event)"
+          />
+          <div>
+            <strong>{{ sub.name }}</strong><br />
+            <small class="text-muted">{{ getProviderName(sub.provider_id) }}</small>
+          </div>
+        </div>
+        <span class="badge bg-primary rounded-pill" title="Date du prochain paiement">
+          {{ sub.next_payment_date | date: "dd/MM/yyyy" }}
+        </span>
+      </li>
+    </ul>
+  </div>
+
+  <hr />
+
+  <!-- LISTE DES ABONNEMENTS -->
+  <h3 class="text-center mb-3">Liste des abonnements</h3>
+  <table
+    class="table table-hover table-bordered text-center align-middle"
+  >
+    <thead class="table-light">
+      <tr>
+        <th>Logo</th>
+        <th>Nom</th>
+        <th>Fournisseur</th>
+        <th>Montant</th>
+        <th>Cycle</th>
+        <th>Date de création</th>
+        <th>Prochain paiement</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let sub of subscriptions">
+        <td>
+          <img
+            *ngIf="sub.logo_path"
+            [src]="sub.logo_path"
+            alt="Logo"
+            class="logo-table"
+            (error)="hideImage($event)"
+          />
+        </td>
+        <td>{{ sub.name }}</td>
+        <td>{{ getProviderName(sub.provider_id) }}</td>
+        <td>{{ sub.amount }} DT</td>
+        <td>{{ sub.billing_cycle === 'monthly' ? 'Mensuel' : 'Annuel' }}</td>
+        <td>{{ sub.created_at | date: 'dd/MM/yyyy' }}</td>
+        <td>{{ sub.next_payment_date | date: 'dd/MM/yyyy' }}</td>
+        <td>
+          <button
+            class="btn btn-sm btn-warning me-2"
+            (click)="editSubscription(sub)"
+          >
+            Modifier
+          </button>
+          <button
+            class="btn btn-sm btn-danger"
+            (click)="deleteSubscription(sub.id)"
+          >
+            Supprimer
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <hr />
+
+  <!-- NOTIFICATIONS -->
+  <h3 class="text-center mb-3">Notifications</h3>
+  <div *ngIf="notifications.length === 0" class="text-muted text-center mb-3">
+    Aucune notification pour le moment.
+  </div>
+  <ul
+    class="list-group mb-3"
+    *ngIf="notifications.length > 0"
+    style="max-width: 600px; margin: auto;"
+  >
+    <li *ngFor="let notif of notifications" class="list-group-item">
+      <strong>{{ notif.title }}</strong><br />
+      <small>{{ notif.body }}</small><br />
+      <small class="text-muted fst-italic">
+        {{ notif.date | date: 'dd/MM/yyyy HH:mm:ss' }}
+      </small>
+    </li>
+  </ul>
+
+  <div class="text-center mb-4" *ngIf="notifications.length > 0">
+    <button
+      class="btn btn-sm btn-outline-danger"
+      (click)="clearNotifications()"
+    >
+      Effacer les notifications
+    </button>
+  </div>
+</div>

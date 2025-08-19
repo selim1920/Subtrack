@@ -1,0 +1,44 @@
+<div class="custom-dashboard-layout">
+  <aside class="sidebar">
+    <!-- Logo / Header -->
+    <div class="sidebar-header">
+      <div class="logo-icon">🛠️</div>
+      <h3>Admin Panel</h3>
+    </div>
+
+    <!-- Utilisateur connecté -->
+    <div class="current-user" *ngIf="currentUser">
+      <div class="avatar">{{ currentUser.name.charAt(0) }}</div>
+      <p class="name">{{ currentUser.name }}</p>
+      <p class="email">{{ currentUser.email }}</p>
+    </div>
+
+    <!-- Menu -->
+    <ul>
+      <li>
+        <a routerLink="/dashboard-admin">
+          <span class="icon">🏠</span> Dashboard
+        </a>
+      </li>
+      <li>
+        <a routerLink="/dashboard-admin/subscription-list">
+          <span class="icon">📃</span> Abonnements
+        </a>
+      </li>
+      <li>
+        <a routerLink="/dashboard-admin/provider-list">
+          <span class="icon">👤</span> Providers
+        </a>
+      </li>
+    </ul>
+
+    <!-- Déconnexion -->
+    <button (click)="logout()">
+      <span class="icon">🚪</span> Déconnexion
+    </button>
+  </aside>
+
+  <main class="content">
+    <router-outlet></router-outlet>
+  </main>
+</div>

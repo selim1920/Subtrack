@@ -1,0 +1,204 @@
+/* Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+@import url('https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css');
+
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background: linear-gradient(135deg, #6c63ff, #3f3cbb);
+}
+
+/* Animated Gradient Background */
+body::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 200%; height: 200%;
+  background: linear-gradient(45deg, #6c63ff, #3f3cbb, #ff6ec7, #42e695);
+  background-size: 400% 400%;
+  animation: gradientMove 20s ease infinite;
+  z-index: -1;
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.container {
+  min-height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  padding: 0 15px;
+}
+
+/* Form Box */
+.form {
+  position: relative;
+  max-width: 400px;
+  width: 100%;
+  padding: 40px 35px;
+  border-radius: 25px;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+  transition: all 0.6s ease;
+}
+
+/* Login/Signup animation */
+.form.login {
+  transform: translateX(0);
+  opacity: 1;
+  z-index: 2;
+}
+
+.form.signup {
+  transform: translateX(100%);
+  opacity: 0;
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.forms.show-signup .form.login {
+  transform: translateX(-100%);
+  opacity: 0;
+  z-index: 1;
+}
+
+.forms.show-signup .form.signup {
+  transform: translateX(0);
+  opacity: 1;
+  z-index: 2;
+}
+
+/* Header */
+header {
+  font-size: 32px;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+  margin-bottom: 30px;
+  letter-spacing: 1px;
+}
+
+/* Fields */
+.field {
+  position: relative;
+  height: 55px;
+  margin-top: 20px;
+}
+
+.field input,
+.field button {
+  height: 100%;
+  width: 100%;
+  border-radius: 15px;
+  font-size: 16px;
+  border: none;
+}
+
+.field input {
+  padding: 0 20px;
+  border: 1px solid #d1d1d1;
+  box-shadow: inset 0 3px 8px rgba(0,0,0,0.05);
+  background-color: #f9f9f9;
+  transition: all 0.3s ease;
+}
+
+.field input:focus {
+  border-color: #6c63ff;
+  box-shadow: 0 0 10px rgba(108,99,255,0.25);
+  background-color: #fff;
+}
+
+/* Eye icon */
+.eye-icon {
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  font-size: 22px;
+  color: #8b8b8b;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.eye-icon:hover {
+  color: #6c63ff;
+}
+
+/* Buttons */
+.field button {
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  background: linear-gradient(135deg, #6c63ff, #3f3cbb);
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 25px rgba(108,99,255,0.3);
+}
+
+.field button:hover {
+  background: linear-gradient(135deg, #5b54e6, #2f2aa0);
+  transform: translateY(-3px);
+  box-shadow: 0 14px 30px rgba(108,99,255,0.45);
+}
+
+/* Links */
+.form-link {
+  text-align: center;
+  margin-top: 18px;
+}
+
+.form-link span,
+.form-link a {
+  font-size: 14px;
+  color: #333;
+}
+
+.form a {
+  color: #6c63ff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.form a:hover {
+  text-decoration: underline;
+}
+
+/* Line separator */
+.line {
+  position: relative;
+  height: 1px;
+  width: 100%;
+  margin: 35px 0;
+  background-color: #e0e0e0;
+}
+
+.line::before {
+  content: 'Or';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(255,255,255,0.95);
+  color: #999;
+  padding: 0 12px;
+}
+
+/* Responsive */
+@media screen and (max-width: 420px) {
+  .form {
+    padding: 35px 20px;
+  }
+}

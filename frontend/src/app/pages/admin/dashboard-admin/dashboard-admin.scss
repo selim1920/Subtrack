@@ -1,0 +1,245 @@
+/* ========================
+   Cartes Dashboard
+   ======================== */
+.earning-card {
+  position: relative;
+  border-radius: 1.5rem;
+  padding: 2rem;
+  min-height: 220px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.earning-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 35px rgba(0,0,0,0.12);
+}
+
+.earning-card .round {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.12;
+  z-index: 0;
+}
+
+.earning-card .small { width: 60px; height: 60px; top: 15px; right: 15px; }
+.earning-card .big { width: 120px; height: 120px; bottom: -30px; left: -30px; }
+
+.earning-card .avatar { z-index: 1; }
+
+.earning-card .number-display {
+  font-size: 60px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0.2rem 0;
+  z-index: 1;
+}
+
+.earning-card .card-label {
+  font-size: 20px;
+  font-weight: 500;
+  color: #fff;
+  margin: 0;
+  z-index: 1;
+}
+
+.earning-card.users-card { background: linear-gradient(135deg, #42a5f5, #478ed1); }
+.earning-card.providers-card { background: linear-gradient(135deg, #ff9800, #f57c00); }
+.earning-card.subscriptions-card { background: linear-gradient(135deg, #66bb6a, #43a047); }
+
+/* ========================
+   Chart Cards
+   ======================== */
+.chart-card {
+  border-radius: 1.5rem;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  padding: 1.5rem;
+  background-color: #fff;
+}
+
+.chart-card .chart-title {
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+/* ========================
+   Tableau amélioré
+   ======================== */
+.table-card {
+  border-radius: 1.5rem;
+  box-shadow: 0 6px 25px rgba(0,0,0,0.1);
+  padding: 1.5rem;
+  background-color: #fff;
+  overflow: hidden;
+}
+
+.table-card .table-responsive {
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.table-card table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.95rem;
+}
+
+.table-card table thead {
+  background: linear-gradient(135deg, #42a5f5, #478ed1);
+  color: #fff;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.table-card table thead th {
+  padding: 1rem 1.2rem;
+  border: none;
+  text-align: left;
+}
+
+.table-card table tbody tr {
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.table-card table tbody tr:nth-child(odd) {
+  background-color: #f8f9fa;
+}
+
+.table-card table tbody tr:hover {
+  background-color: rgba(66,165,245,0.15);
+  transform: translateX(5px);
+}
+
+.table-card table tbody td {
+  padding: 0.9rem 1.2rem;
+  vertical-align: middle;
+}
+
+.table-card table tbody .badge {
+  padding: 0.4em 0.75em;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: 0.5rem;
+}
+
+.table-card table tbody .btn {
+  padding: 0.35rem 0.7rem;
+  font-size: 0.8rem;
+}
+
+.table-card .table-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+/* Scrollbar styles */
+.table-card .table-responsive::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+
+.table-card .table-responsive::-webkit-scrollbar-thumb {
+  background-color: rgba(0,0,0,0.2);
+  border-radius: 10px;
+}
+
+.table-card .table-responsive::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+/* Styles alternatifs pour les tableaux */
+.table-card table thead.thead-dark {
+  background-color: #343a40;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.table-card table tbody tr:hover {
+  background-color: rgba(0,123,255,0.05);
+  transition: background 0.25s;
+}
+
+.table-card table td,
+.table-card table th {
+  padding: 0.8rem 1rem;
+}
+
+/* ========================
+   Loading
+   ======================== */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ========================
+   Modal
+   ======================== */
+.modal-custom {
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.modal-custom .modal-header {
+  background: linear-gradient(135deg, #42a5f5, #478ed1);
+  color: #fff;
+}
+
+.modal-custom .modal-body {
+  background-color: #f8f9fa;
+}
+
+.modal-custom .btn-close {
+  filter: invert(1);
+}
+
+/* ========================
+   Icônes
+   ======================== */
+.f-48 { font-size: 48px; }
+
+/* ========================
+   Alert Styles
+   ======================== */
+.dashboard-alert {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  padding: 1rem 1.5rem;
+  border-radius: 0.75rem;
+  font-weight: 500;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  color: #fff;
+  z-index: 9999;
+  min-width: 250px;
+  max-width: 350px;
+  opacity: 0.95;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dashboard-alert.success { background-color: #28a745; }
+.dashboard-alert.error { background-color: #dc3545; }
+
+.dashboard-alert .alert-message {
+  flex: 1;
+  margin-right: 1rem;
+}
+
+.dashboard-alert .alert-close {
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 1.2rem;
+  line-height: 1;
+  color: #fff;
+}
