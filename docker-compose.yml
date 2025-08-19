@@ -1,0 +1,84 @@
+version: '3.8'
+
+services:
+  php:
+    build:
+      context: ./docker/php
+    volumes:
+      - ./backend:/var/www
+    networks:
+      - subtrack
+    depends_on:
+      - pgsql
+      - mailhog
+
+  scheduler:
+    build:
+      context: ./docker/php
+    volumes:
+      - ./backend:/var/www
+    networks:
+      - subtrack
+    depends_on:
+      - pgsql
+      - mailhog
+    command: php /var/www/artisan schedule:work
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - ./backend:/var/www
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - subtrack
+    depends_on:
+      - php
+
+  pgsql:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: subtrack
+      POSTGRES_USER: laravel
+      POSTGRES_PASSWORD: secret
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - subtrack
+
+  redis:
+    image: redis:alpine
+    networks:
+      - subtrack
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "8025:8025"
+    networks:
+      - subtrack
+
+  pgadmin:
+    image: dpage/pgadmin4
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    networks:
+      - subtrack
+    depends_on:
+      - pgsql
+
+volumes:
+  pgdata:
+  pgadmin-data:
+
+networks:
+  subtrack:
+    driver: bridge
